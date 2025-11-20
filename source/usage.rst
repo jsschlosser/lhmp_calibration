@@ -106,7 +106,10 @@ Install Harvesters
 	
 			$ pip install opencv-python
 
-Run programs in Harvesters
+			
+
+Example of running programs in Harvesters
+-----------------------------------------
 	a) Activate virtual environment.
 		.. code-block:: console
 	
@@ -121,6 +124,7 @@ Run programs in Harvesters
 		.. code-block:: console
 	
 			$ python3 TestSample.py
+
 
 Instructions for building sphinx documentation locally
 ------------------------------------------------------
