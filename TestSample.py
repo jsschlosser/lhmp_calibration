@@ -18,6 +18,3 @@ def Run():
 	camera_settings['ExposureTimeSetting'] = 1500
 	output = CaptureSample.Run(camera_settings)
 	print(output)
-    image_data_list = output['image_data_list']
-    for i in  image_data_list:             
-        cv2.imwrite(f'Image_{i}.png', image_data_list[i])
