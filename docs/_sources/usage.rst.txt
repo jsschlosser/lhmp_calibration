@@ -75,6 +75,10 @@ Install ArenaSDK Software (ArenaSDK_v0.1.78_Linux_ARM64)
 
 
 Install arena api
+	.. note::
+
+		Full details in '~/arena_api-2.7.1-py3-none-any/README.txt'
+
 	a) Setup virtual environment.
 		.. code-block:: console
 	
