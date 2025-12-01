@@ -73,19 +73,8 @@ Install ArenaSDK Software (ArenaSDK_v0.1.78_Linux_ARM64)
 	   		$ cd ~/Documents/ArenaSDK_v0.1.78_Linux_ARM64/ArenaSDK_Linux_ARM64
 	   		$ sudo sh Arena_SDK_ARM64.conf
 
-Install ImpactAcquire
-	a) Download latest version of ImpactAcquire-arm64-linux-X.X.X.sh from dhttp://static.matrix-vision.com/mvIMPACT_Acquire/
-	
-	b) Place ImpactAcquire-arm64-linux-X.X.X.sh in '~/.'
-	
-	c) Install.
-		.. code-block:: console 
 
-			$ cd ~/
-			$ ./ImpactAcquire-arm64-linux-X.X.X.sh
-
-
-Install Harvesters
+Install arena api
 	a) Setup virtual environment.
 		.. code-block:: console
 	
@@ -99,14 +88,20 @@ Install Harvesters
 	c) Install Harvesters.
 		.. code-block:: console
 
-			$ pip install harvesters
+			$ cd arena_api-2.7.1-py3-none-any
+			$ pip install arena_api-2.7.1-py3-none-any.whl
+			$ pip install -r examples/requirements_lin_arm64.txt
+			$ sudo apt-get install python3-tk
 
 	d) Install standard openCV.
 		.. code-block:: console
 	
 			$ pip install opencv-python
 
-Run programs in Harvesters
+			
+
+Example of running programs in Arena api
+-----------------------------------------
 	a) Activate virtual environment.
 		.. code-block:: console
 	
@@ -115,12 +110,13 @@ Run programs in Harvesters
 	b) Set appropriate directory with python scripts.
 		.. code-block:: console
 	
-			$ cd ~/Documents
+			$ cd ~/Documents/arena_api-2.7.1-py3-none-any/examples
 
 	c) Run desired python script.
 		.. code-block:: console
 	
-			$ python3 TestSample.py
+			$ python3 py_save.py
+
 
 Instructions for building sphinx documentation locally
 ------------------------------------------------------

@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -7,15 +5,16 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Usage &mdash; LHMP 1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=86f27845" />
 
   
-      <script src="_static/jquery.js?v=5d32c60e"></script>
-      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=f2a433a1"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+  
+        <script src="_static/jquery.js?v=8dae8fb0"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -47,15 +46,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#copyright">Copyright</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#configuring-the-raspberry-pi">Configuring the Raspberry Pi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-of-running-programs-in-arena-api">Example of running programs in Arena api</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#instructions-for-building-sphinx-documentation-locally">Instructions for building sphinx documentation locally</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#test-the-instrument-functionality">Test the instrument functionality</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#TestSample.Run"><code class="docutils literal notranslate"><span class="pre">Run()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#basic-function-for-capturing-samples-with-the-lhmp">Basic function for capturing samples with the LHMP</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#CaptureSample.Run"><code class="docutils literal notranslate"><span class="pre">Run()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#test-the-instrument-functionality">Test the instrument functionality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-function-for-capturing-samples-with-the-lhmp">Basic function for capturing samples with the LHMP</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
@@ -181,20 +175,7 @@
 </li>
 </ol>
 </dd>
-<dt>Install ImpactAcquire</dt><dd><ol class="loweralpha">
-<li><p>Download latest version of ImpactAcquire-arm64-linux-X.X.X.sh from dhttp://static.matrix-vision.com/mvIMPACT_Acquire/</p></li>
-<li><p>Place ImpactAcquire-arm64-linux-X.X.X.sh in ‘~/.’</p></li>
-<li><dl>
-<dt>Install.</dt><dd><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/
-<span class="gp">$ </span>./ImpactAcquire-arm64-linux-X.X.X.sh
-</pre></div>
-</div>
-</dd>
-</dl>
-</li>
-</ol>
-</dd>
-<dt>Install Harvesters</dt><dd><ol class="loweralpha">
+<dt>Install arena api</dt><dd><ol class="loweralpha">
 <li><dl>
 <dt>Setup virtual environment.</dt><dd><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>myvirtualenv
 </pre></div>
@@ -210,7 +191,10 @@
 </dl>
 </li>
 <li><dl>
-<dt>Install Harvesters.</dt><dd><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>harvesters
+<dt>Install Harvesters.</dt><dd><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>arena_api-2.7.1-py3-none-any
+<span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>arena_api-2.7.1-py3-none-any.whl
+<span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>examples/requirements_lin_arm64.txt
+<span class="gp">$ </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>python3-tk
 </pre></div>
 </div>
 </dd>
@@ -225,7 +209,12 @@
 </li>
 </ol>
 </dd>
-<dt>Run programs in Harvesters</dt><dd><ol class="loweralpha">
+</dl>
+</section>
+<section id="example-of-running-programs-in-arena-api">
+<h2>Example of running programs in Arena api<a class="headerlink" href="#example-of-running-programs-in-arena-api" title="Link to this heading"></a></h2>
+<blockquote>
+<div><ol class="loweralpha">
 <li><dl>
 <dt>Activate virtual environment.</dt><dd><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">source</span><span class="w"> </span>~/myvirtualenv/bin/activate
 </pre></div>
@@ -234,22 +223,21 @@
 </dl>
 </li>
 <li><dl>
-<dt>Set appropriate directory with python scripts.</dt><dd><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/Documents
+<dt>Set appropriate directory with python scripts.</dt><dd><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/Documents/arena_api-2.7.1-py3-none-any/examples
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>Run desired python script.</dt><dd><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>TestSample.py
+<dt>Run desired python script.</dt><dd><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>py_save.py
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
 </ol>
-</dd>
-</dl>
+</div></blockquote>
 </section>
 <section id="instructions-for-building-sphinx-documentation-locally">
 <h2>Instructions for building sphinx documentation locally<a class="headerlink" href="#instructions-for-building-sphinx-documentation-locally" title="Link to this heading"></a></h2>
@@ -324,40 +312,9 @@
 </section>
 <section id="test-the-instrument-functionality">
 <h2>Test the instrument functionality<a class="headerlink" href="#test-the-instrument-functionality" title="Link to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="TestSample.Run">
-<span class="sig-prename descclassname"><span class="pre">TestSample.</span></span><span class="sig-name descname"><span class="pre">Run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TestSample.Run" title="Link to this definition"></a></dt>
-<dd><p>Simple function for inputting camera settings and acquiring images from the LHMP.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dictionary of raw image data in digital number along with the image metadata of exposure time (us), gain, acquisition time (UTC), sensor temperature (degC)</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>numpy dictionary</p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 <section id="basic-function-for-capturing-samples-with-the-lhmp">
 <h2>Basic function for capturing samples with the LHMP<a class="headerlink" href="#basic-function-for-capturing-samples-with-the-lhmp" title="Link to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="CaptureSample.Run">
-<span class="sig-prename descclassname"><span class="pre">CaptureSample.</span></span><span class="sig-name descname"><span class="pre">Run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camera_settings</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CaptureSample.Run" title="Link to this definition"></a></dt>
-<dd><p>Basic function for capturing samples with the LHMP.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>camera_settings</strong> (<em>numpy dictionary</em>) – dictionary containing the gain and exposure time camera settings as well as the acquisition duration</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>dictionary of raw image data in digital number along with the image metadata of exposure time (us), gain, acquisition time (UTC), sensor temperature (degC)</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy dictionary</p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 </section>
 
