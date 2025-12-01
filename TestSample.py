@@ -10,11 +10,10 @@ def Run():
 	"""  
 
 	camera_settings = {}
-	camera_settings['CTI_path'] = '/opt/sentech/lib/libstgentl.cti'
 	camera_settings['acquisition_duration'] = 10
 	camera_settings['GainAuto'] = 'Off' #'Continuous' #'Off'
 	camera_settings['ExposureAuto'] = 'Off'
-	camera_settings['GainSetting'] = 30
-	camera_settings['ExposureTimeSetting'] = 1500
+	camera_settings['GainSetting'] = 0
+	camera_settings['ExposureTimeSetting'] = 5147373
 	output = CaptureSample.Run(camera_settings)
 	print(output)

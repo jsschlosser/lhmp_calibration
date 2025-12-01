@@ -1,5 +1,7 @@
-from harvesters.core import Harvester
-import genicam
+from arena_api.system import system
+import os
+import time
+from pathlib import Path
 import cv2
 import matplotlib.pyplot as plt 
 import numpy as np 
@@ -7,6 +9,7 @@ import time
 from datetime import date
 from datetime import datetime
 from zoneinfo import ZoneInfo
+
 import os
 def Run(camera_settings):
     """
@@ -17,53 +20,76 @@ def Run(camera_settings):
     :return: dictionary of raw image data in digital number along with the image metadata of exposure time (us), gain, acquisition time (UTC), sensor temperature (degC)
     :rtype: numpy dictionary
     """  
-    h = Harvester() # 1. Initialize Harvester
-    h.add_file(camera_settings['CTI_path'])# Add the path to your GenTL Producer's CTI file (e.g., '/opt/sentech/lib/libstgentl.cti')
-    h.update()
+    devices = system.create_device()
+
     image_data_list = [] # Store acquired images
     image_info_list = [] # Store acquired image meta info (Gain, Exposure Time, Acquisition Time, etc.,)
-    if len(h.device_info_list)>0:
+    if len(devices)>0:
         start_time = time.time()
-
         print(f"Starting image acquisition for {camera_settings['acquisition_duration']} seconds...")
-        ia = h.create(0) # Create an ImageAcquirer object (representing your camera)
-        ia.start() # Start continuous acquisition
-        #print(dir(ia.remote_device.node_map))
-        ia_nm = ia.remote_device.node_map
-        ia_nm.GainAuto.value = camera_settings['GainAuto']  #'Continuous'
-        if ia_nm.GainAuto.value == 'Off':
-            ia_nm.Gain.value = camera_settings['GainSetting']
-        ia_nm.ExposureAuto.value = camera_settings['ExposureAuto'] 
-        if ia_nm.ExposureAuto.value == 'Off':
-            ia_nm.ExposureTime.value = camera_settings['ExposureTimeSetting']        
+
+        devices = create_devices_with_tries()
+        device = system.select_device(devices)  
+
+        tl_stream_nodemap = device.tl_stream_nodemap # Get device stream nodemap   
+        tl_stream_nodemap['StreamAutoNegotiatePacketSize'].value = True # Enable stream auto negotiate packet size
+        tl_stream_nodemap['StreamPacketResendEnable'].value = True # Enable stream packet resend
+        
+        device_nm = device.node_map
+        device_nm.GainAuto.value = camera_settings['GainAuto']  #'Continuous'
+        if device_nm.GainAuto.value == 'Off':
+            device_nm.Gain.value = camera_settings['GainSetting']
+        device_nm.ExposureAuto.value = camera_settings['ExposureAuto'] 
+        if device_nm.ExposureAuto.value == 'Off':
+            device_nm.ExposureTime.value = camera_settings['ExposureTimeSetting']     
+
+        # Get nodes ---------------------------------------------------------------
+        nodes = device_nm.get_node(['Width', 'Height', 'PixelFormat']) 
+
+        # Nodes
+        nodes['Width'].value = nodes['Width'].max   
+
+        height = nodes['Height']
+        height.value = height.max   
+
+        # Set pixel format to 'PolarizedDolp_BayerRG8'
+        pixel_format_name = 'PolarizedDolp_BayerRG8'
+        nodes['PixelFormat'].value = pixel_format_name
+
         while time.time() - start_time < camera_settings['acquisition_duration']: # Continuously fetch and process images
-            try:
-                buffer = ia.fetch(timeout=3)  # Fetch a buffer (which contains the image with a timeout in seconds
-                payload = buffer.payload # Extract image data
-                component = payload.components[0]  # Assuming a single image component
-                width = component.width
-                height = component.height
-                data_format = component.data_format
-                content = component.data.reshape(height, width)  # Reshape to a 2D array
-                image_data_list.append(content.copy()) # Store the image data
+            with device.start_stream(1):
+                image_buffer = device.get_buffer()  # Optional args         
+
+                """
+                np.ctypeslib.as_array() detects that Buffer.pdata is (uint8, c_ubyte)
+                type so it interprets each byte as an element.
+                For 16Bit images Buffer.pdata must be cast to (uint16, c_ushort)
+                using ctypes.cast(). After casting, np.ctypeslib.as_array() can
+                interpret every two bytes as one array element (a pixel).
+                """
+                nparray_reshaped = np.ctypeslib.as_array(image_buffer.pdata,
+                                                        (image_buffer.height,
+                                                        image_buffer.width))        
+                image_data_list.append(nparray_reshaped.copy()) # Store the image data
                 utc_now = datetime.now(ZoneInfo("UTC"))
-                gainvalue = ia_nm.Gain.value
-                exposuretimevalue = ia_nm.ExposureTime.value 
-                DeviceT = ia_nm.DeviceTemperature.value #
+                gainvalue = device_nm.Gain.value
+                exposuretimevalue = device_nm.ExposureTime.value 
+                DeviceT = device_nm.DeviceTemperature.value #
                 image_info_list.append([exposuretimevalue, gainvalue, utc_now.strftime('%Y%m%dT%H%M%S-%f'), DeviceT])
-                # Optional: Process or save the image (e.g., using OpenCV)
-                # imagename = f"Image_{exposuretimevalue}-{gainvalue}_{utc_now.strftime('%Y%m%dT%H%M%S-%f')}"
-                #cv2.imwrite(f'{imagename}.png', content)
-                buffer.queue()  # Queue the buffer for the next image acquisition, which is crucial for continuous acquisition 
-            except genicam.gentl.TimeoutException:
-                print("No buffer delivered within the timeout period. Continuing...")
-                continue
-            except Exception as e:
-                print(f"Error during acquisition: {e}")
-                break # Exit loop on unexpected errors
-        ia.stop()# Stop acquisition and clean up
-        ia.destroy()
-        h.reset()
+                
+                # Saving --------------------------------------------------------------
+                # RAW
+                png_raw_name = f'from_{pixel_format_name}_raw_to_png_with_opencv.png'
+                cv2.imwrite(png_raw_name, nparray_reshaped)
+
+                # HSV
+                png_hsv_name = f'from_{pixel_format_name}_hsv_to_png_with_opencv.png'
+                cm_nparray = cv2.applyColorMap(nparray_reshaped, cv2.COLORMAP_HSV)
+                cv2.imwrite(png_hsv_name, cm_nparray)
+
+
+        device.requeue_buffer(image_buffer)
+
     output_dictionary = {}
     output_dictionary['image_data_list'] = image_data_list
     output_dictionary['image_info_list'] = image_info_list
