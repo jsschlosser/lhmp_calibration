@@ -85,7 +85,7 @@ Install arena api
 	
 			$ source ~/myvirtualenv/bin/activate
 
-	c) Install arena api.
+	c) Install Harvesters.
 		.. code-block:: console
 
 			$ cd arena_api-2.7.1-py3-none-any
