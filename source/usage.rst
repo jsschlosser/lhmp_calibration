@@ -123,47 +123,34 @@ Instructions for building sphinx documentation locally
 
 This section describes how to build the sphinx documentation locally. 
 
-	a) Setup virtual environment.
-		.. code-block:: console
 
-			$ python3 -m venv myvirtualenv
-
-	b) Activate virtual environment.
+	a) Activate virtual environment.
 		.. code-block:: console
 
 			$ source ~/myvirtualenv/bin/activate
 
-	c) Install Harvesters.
-		.. code-block:: console
 
-			$ pip install harvesters
-
-	d) Install standard openCV.
-		.. code-block:: console
-
-			$ pip install opencv-python
-
-	e) Install matplotlib.
+	b) Install matplotlib.
 		.. code-block:: console
 
 			$ pip install matplotlib
 
-	f) Install basic sphinx package.
+	c) Install basic sphinx package.
 		.. code-block:: console
 
 			$ pip install sphinx
 
-	g) Install html theme for sphinx.
+	d) Install html theme for sphinx.
 		.. code-block:: console
 
 			$ pip install sphinx_rtd_theme
 
-	h) Install pdf builder for sphinx.
+	e) Install pdf builder for sphinx.
 		.. code-block:: console
 
 			$ pip install sphinx-simplepdf
 
-	i) Build sphinx.
+	f) Build sphinx.
 		.. code-block:: console
 
 			$ sphinx-build -b html source docs
