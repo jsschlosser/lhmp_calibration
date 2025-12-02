@@ -12,8 +12,9 @@ def Run():
 	camera_settings = {}
 	camera_settings['acquisition_duration'] = 10
 	camera_settings['GainAuto'] = 'Off' #'Continuous' #'Off'
-	camera_settings['ExposureAuto'] = 'Off'
+	camera_settings['ExposureAuto'] = 'Continuous'#'Off'
 	camera_settings['GainSetting'] = 0
-	camera_settings['ExposureTimeSetting'] = 5147373
+	camera_settings['ExposureTimeSetting'] = 2000000#5147373
+	print(camera_settings)
 	output = CaptureSample.Run(camera_settings)
 	print(output)
