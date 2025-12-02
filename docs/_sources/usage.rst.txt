@@ -89,6 +89,11 @@ Install arena api
 	
 			$ source ~/myvirtualenv/bin/activate
 
+	d) Install standard openCV.
+		.. code-block:: console
+	
+			$ pip install opencv-python
+
 	c) Install arena api.
 		.. code-block:: console
 
@@ -96,13 +101,6 @@ Install arena api
 			$ pip install arena_api-2.7.1-py3-none-any.whl
 			$ pip install -r examples/requirements_lin_arm64.txt
 			$ sudo apt-get install python3-tk
-
-	d) Install standard openCV.
-		.. code-block:: console
-	
-			$ pip install opencv-python
-
-			
 
 Example of running programs in Arena api
 -----------------------------------------
@@ -114,12 +112,14 @@ Example of running programs in Arena api
 	b) Set appropriate directory with python scripts.
 		.. code-block:: console
 	
-			$ cd ~/Documents/arena_api-2.7.1-py3-none-any/examples
+			$ cd ~/Documents
 
 	c) Run desired python script.
 		.. code-block:: console
 	
-			$ python3 py_save.py
+			$ python3
+			$ import TestSample
+			$ TestSample.Run()
 
 
 Instructions for building sphinx documentation locally
