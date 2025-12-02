@@ -164,8 +164,6 @@ Test the instrument functionality
 
 .. autofunction:: TestSample.Run
 
-Basic function for capturing samples with the LHMP
---------------------------------------------------
 
 .. autofunction:: CaptureSample.Run
 
