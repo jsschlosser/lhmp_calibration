@@ -80,11 +80,11 @@ def Run(camera_settings):
                 
                 # Saving --------------------------------------------------------------
                 # RAW
-                png_raw_name = f'Image_{pixel_format_name}_raw_{utc_now.strftime('%Y%m%dT%H%M%S-%f')}.png'
+                png_raw_name = f'Image_{pixel_format_name}_raw_{utc_now.strftime("%Y%m%dT%H%M%S-%f")}.png'
                 cv2.imwrite(png_raw_name, nparray_reshaped)
 
                 # HSV
-                png_hsv_name = f'Image_{pixel_format_name}_hsv_{utc_now.strftime('%Y%m%dT%H%M%S-%f')}.png'
+                png_hsv_name = f'Image_{pixel_format_name}_hsv_{utc_now.strftime("%Y%m%dT%H%M%S-%f")}.png'
                 cm_nparray = cv2.applyColorMap(nparray_reshaped, cv2.COLORMAP_HSV)
                 cv2.imwrite(png_hsv_name, cm_nparray)
 

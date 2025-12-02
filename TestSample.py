@@ -15,6 +15,6 @@ def Run():
 	camera_settings['ExposureAuto'] = 'Continuous'#'Off'
 	camera_settings['GainSetting'] = 0
 	camera_settings['ExposureTimeSetting'] = 2000000#5147373
-	print(camera_settings)
+	print(f"Camera Settings: {camera_settings}")
 	output = CaptureSample.Run(camera_settings)
-	print(output)
+	print(f"Output Dictionary: {output}")
