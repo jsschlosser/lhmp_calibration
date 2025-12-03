@@ -1,5 +1,7 @@
 import CaptureSample
 import cv2
+import numpy as np 
+
 def Run():
 	"""
 	Simple function for inputting camera settings and acquiring images from the LHMP.
@@ -18,3 +20,5 @@ def Run():
 	print(f"Camera Settings: {camera_settings}")
 	output = CaptureSample.Run(camera_settings)
 	print(f"Output Dictionary: {output}")
+
+	np.save(f'Image_Dictionary.npy', output) 
