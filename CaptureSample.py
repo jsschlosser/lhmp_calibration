@@ -2,10 +2,7 @@ from arena_api.system import system
 import os
 import time
 from pathlib import Path
-import cv2
-import matplotlib.pyplot as plt 
 import numpy as np 
-import time
 from datetime import date
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -22,12 +19,8 @@ def Run(camera_settings):
     """  
     devices = system.create_device()    
     print(devices)
-    image_data_list = [] # Store acquired images
-    image_info_list = [] # Store acquired image meta info (Gain, Exposure Time, Acquisition Time, etc.,)
+    image_data = {} # Store acquired images as well as meta info (Gain, Exposure Time, Acquisition Time, etc.,)
     if len(devices)>0:
-        start_time = time.time()
-        print(f"Starting image acquisition for {camera_settings['acquisition_duration']} seconds...")
-
         devices = system.create_device()
         device = system.select_device(devices)  
 
@@ -54,44 +47,25 @@ def Run(camera_settings):
         height.value = height.max   
 
         # Set pixel format to 'PolarizedDolp_BayerRG8'
-        pixel_format_name = 'PolarizedDolp_BayerRG8'
+        pixel_format_name = camera_settings['PixelFormat']
         nodes['PixelFormat'].value = pixel_format_name
 
-        while time.time() - start_time < camera_settings['acquisition_duration']: # Continuously fetch and process images
-            with device.start_stream(1):
-                image_buffer = device.get_buffer()  # Optional args         
-
-                """
-                np.ctypeslib.as_array() detects that Buffer.pdata is (uint8, c_ubyte)
-                type so it interprets each byte as an element.
-                For 16Bit images Buffer.pdata must be cast to (uint16, c_ushort)
-                using ctypes.cast(). After casting, np.ctypeslib.as_array() can
-                interpret every two bytes as one array element (a pixel).
-                """
-                nparray_reshaped = np.ctypeslib.as_array(image_buffer.pdata,
-                                                        (image_buffer.height,
-                                                        image_buffer.width))        
-                image_data_list.append(nparray_reshaped.copy()) # Store the image data
-                utc_now = datetime.now(ZoneInfo("UTC"))
-                gainvalue = device_nm['GainRaw'].value
-                exposuretimevalue = device_nm['ExposureTimeRaw'].value 
-                DeviceT = device_nm['DeviceTemperature'].value #
-                image_info_list.append([exposuretimevalue, gainvalue, utc_now.strftime('%Y%m%dT%H%M%S-%f'), DeviceT])
-                
-                # Saving --------------------------------------------------------------
-                # RAW
-                png_raw_name = f'Image_{pixel_format_name}_raw_{utc_now.strftime("%Y%m%dT%H%M%S-%f")}.png'
-                cv2.imwrite(png_raw_name, nparray_reshaped)
-
-                # HSV
-                png_hsv_name = f'Image_{pixel_format_name}_hsv_{utc_now.strftime("%Y%m%dT%H%M%S-%f")}.png'
-                cm_nparray = cv2.applyColorMap(nparray_reshaped, cv2.COLORMAP_HSV)
-                cv2.imwrite(png_hsv_name, cm_nparray)
-
-
-                device.requeue_buffer(image_buffer)
-
-    output_dictionary = {}
-    output_dictionary['image_data_list'] = image_data_list
-    output_dictionary['image_info_list'] = image_info_list
-    return output_dictionary
+        with device.start_stream(1):
+            image_buffer = device.get_buffer()  # Optional args         
+            """
+            np.ctypeslib.as_array() detects that Buffer.pdata is (uint8, c_ubyte)
+            type so it interprets each byte as an element.
+            For 16Bit images Buffer.pdata must be cast to (uint16, c_ushort)
+            using ctypes.cast(). After casting, np.ctypeslib.as_array() can
+            interpret every two bytes as one array element (a pixel).
+            """
+            nparray_reshaped = np.ctypeslib.as_array(image_buffer.pdata,
+                                                    (image_buffer.height,
+                                                    image_buffer.width))        
+            image_data['raw'] = nparray_reshaped # Store the image data
+            image_data['time_UTC'] = datetime.now(ZoneInfo("UTC"))
+            image_data['gain'] = device_nm['GainRaw'].value
+            image_data['exposure_time_s'] = device_nm['ExposureTimeRaw'].value 
+            image_data['temperature_C'] = device_nm['DeviceTemperature'].value #
+        
+    return image_data
