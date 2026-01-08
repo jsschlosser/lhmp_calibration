@@ -12,13 +12,14 @@ def Run():
 	"""  
 
 	camera_settings = {}
-	camera_settings['acquisition_duration'] = 10
+	camera_settings['acquisition_duration'] = 60
 	camera_settings['GainAuto'] = 'Off' #'Continuous' #'Off'
 	camera_settings['ExposureAuto'] = 'Continuous'#'Off'
 	camera_settings['GainSetting'] = 0
 	camera_settings['ExposureTimeSetting'] = 2000000#5147373
+	camera_settings['baud'] = 9600
 	print(f"Camera Settings: {camera_settings}")
-	output = CaptureSample.Run(camera_settings)
-	print(f"Output Dictionary: {output}")
-
-	np.save(f'Image_Dictionary.npy', output) 
+	CaptureSample.Run(camera_settings)
+	#print(f"Output Dictionary: {output}")
+	#np.save(f'Image_Dictionary.npy', output) 
+	
