@@ -100,14 +100,14 @@ def Run(camera_settings):
                 
                 # Saving --------------------------------------------------------------
                 # RAW
-                #png_raw_name = f'Image_{pixel_format_name}_raw_{utc_now.strftime("%Y%m%dT%H%M%S-%f")}.png'
-                #cv2.imwrite(png_raw_name, nparray_reshaped)
+                png_raw_name = f'./Data/Image_Raw_{image_info[2]}.png'
+                cv2.imwrite(png_raw_name, nparray_reshaped)
 
                 # HSV
                 #png_hsv_name = f'Image_{pixel_format_name}_hsv_{utc_now.strftime("%Y%m%dT%H%M%S-%f")}.png'
                 #cm_nparray = cv2.applyColorMap(nparray_reshaped, cv2.COLORMAP_HSV)
                 #cv2.imwrite(png_hsv_name, cm_nparray)
-                np.savetxt(f"./Data/Image_data_{image_info[2]}.csv",image_data,delimiter=',',fmt='%s')
+                #np.savetxt(f"./Data/Image_data_{image_info[2]}.csv",image_data,delimiter=',',fmt='%s')
                 np.savetxt(f"./Metadata/Image_info_{image_info[2]}.csv",image_info.reshape(1,-1),delimiter=',',fmt='%s')
                 np.savetxt(f"./GPS/GPS_data_{image_info[2]}.csv",gps_data.reshape(1,-1),delimiter=',',fmt='%s')
                 np.savetxt(f"./IMU/IMU_data_{image_info[2]}.csv",imu_data.reshape(1,-1),delimiter=',',fmt='%s')
