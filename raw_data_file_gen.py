@@ -1,0 +1,114 @@
+import numpy as np 
+from datetime import date
+from datetime import time
+from datetime import datetime
+from zoneinfo import ZoneInfo
+import nc_write
+ncwrite = nc_write.simple
+
+def Run(raw_data_dict,Output_Filename):
+	"""
+	Function for saving LHMP data to netCDF.
+
+	:param camera_settings: dictionary containing the gain and exposure time camera settings as well as the acquisition duration 
+	:type camera_settings: numpy dictionary	
+	:return: dictionary of raw image data in digital number along with the image metadata of exposure time (us), gain, acquisition time (UTC), sensor temperature (degC)
+	:rtype: numpy dictionary
+	"""  
+	OP_Dictionary = {}
+	OP_Dictionary['VariableAttributes'] = {}
+	OP_Dictionary['Dims'] = {}
+	dims = {}
+	GlobParams = {}
+
+	raw_data = raw_data_dict['image_data_list']
+	raw_info = raw_data_dict['image_info_list']
+	DATE= raw_info[0,2].strftime("%Y-%m-%d") 
+	print(DATE)
+	GlobParams['conventions']='CF-1.9'
+	GlobParams['data_product_group'] = 'derived'
+	GlobParams['data_use_guideline'] = 'N/A'
+	GlobParams['file_originator'] = 'Joseph Schlosser'
+	GlobParams['file_originator_contact'] = 'joseph.schlosser@hamptonu.edu'
+	GlobParams['flight_start_date'] = DATE
+	GlobParams['format'] = 'NETCDF4'
+	GlobParams['history'] = f'Raw (level 0) LHMP data'
+	GlobParams['IdentifierProductDOI'] = 'TBD'
+	GlobParams['institution'] = 'ORAU-NASA Langley'
+	GlobParams['last_modified_date'] = datetime.today().strftime('%Y-%m-%d')
+	GlobParams['ACVSNC_standard_name_URL'] = 'https://www-air.larc.nasa.gov/missions/etc/AtmosphericCompositionVariableStandardNames.pdf'
+	GlobParams['ACVSNC_standard_name_version'] = '1.0'
+	GlobParams['measurement_platform'] = 'LHMP'
+	GlobParams['PI_contact'] = 'joseph.schlosser@hamptonu.edu'
+	GlobParams['PI_name'] = 'Joseph Schlosser'
+	GlobParams['platform_identifier'] = 'LHMP'
+	GlobParams['ProcessingLevel'] = '4'
+	GlobParams['project'] = 'Langley-Hampton Multispectral Polarimeter (LHMP)'
+	GlobParams['references'] = 'TBD'
+	GlobParams['source'] = 'Raw output data from LHMP'
+	GlobParams['time_coverage_end'] = raw_info[0,2].strftime('%Y%m%dT%H%M%S-%f')
+	GlobParams['time_coverage_resolution'] = '1 second'
+	GlobParams['time_coverage_start'] = raw_info[-1,2].strftime('%Y%m%dT%H%M%S-%f')
+	GlobParams['title'] = 'Level 0 LHMP output data'
+	GlobParams['VersionID'] = f'R0'
+
+	
+	dims['time'] = len(raw_data[:,0,0])
+	OP_Dictionary["time"] = raw_info[:,3]
+	OP_Dictionary['Dims']["time"] = time
+	OP_Dictionary['VariableAttributes']["time"] = {}
+	OP_Dictionary['VariableAttributes']["time"]['short_name'] = 'time'
+	OP_Dictionary['VariableAttributes']["time"]['units'] = f'seconds after {DATE} 00:00:00 UTC.'
+
+	dims['H_pixel'] = len(raw_data[0,:,0])
+	OP_Dictionary['VariableAttributes']["H_pixel"] = {}
+	OP_Dictionary['Dims']["H_pixel"] = 'H_pixel'
+	OP_Dictionary['VariableAttributes']["H_pixel"]['short_name'] = 'H_pixel'
+	OP_Dictionary['VariableAttributes']["H_pixel"]['units'] = '1'
+	OP_Dictionary['VariableAttributes']["H_pixel"]['long_name'] = f'Value corresponding to the physical horizontal pixel position with 0 being the left most column on the detector.'
+
+	dims['V_pixel'] = len(raw_data[0,0,:])
+	OP_Dictionary['VariableAttributes']["V_pixel"] = {}
+	OP_Dictionary['Dims']["V_pixel"] = 'V_pixel'
+	OP_Dictionary['VariableAttributes']["V_pixel"]['short_name'] = 'V_pixel'
+	OP_Dictionary['VariableAttributes']["V_pixel"]['units'] = '1'
+	OP_Dictionary['VariableAttributes']["V_pixel"]['long_name'] = f'Value corresponding to the physical vertical pixel position with 0 being the top most row on the detector.'
+
+	OP_Dictionary["Detector_Exposure_Time"] = raw_info[:,0]
+	OP_Dictionary['Dims']['Detector_Exposure_Time'] = 'time'
+	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"] = {}
+	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"]['_FillValue'] = np.nan
+	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"]['short_name'] = 'et'
+	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"]['units'] = 'miliseconds'
+	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"]['long_name'] = f'Exposure time associated with the LHPM data.'
+	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"]['ACVSNC_standard_name'] = 'none'  
+
+	OP_Dictionary["Detector_Gain"] = raw_info[:,1]
+	OP_Dictionary['Dims']['Detector_Gain'] = 'time'
+	OP_Dictionary['VariableAttributes']["Detector_Gain"] = {}
+	OP_Dictionary['VariableAttributes']["Detector_Gain"]['_FillValue'] = np.nan
+	OP_Dictionary['VariableAttributes']["Detector_Gain"]['short_name'] = 'gain'
+	OP_Dictionary['VariableAttributes']["Detector_Gain"]['units'] = 'dB'
+	OP_Dictionary['VariableAttributes']["Detector_Gain"]['long_name'] = f'Gain associated with the LHPM data.'
+	OP_Dictionary['VariableAttributes']["Detector_Gain"]['ACVSNC_standard_name'] = 'none'
+
+	OP_Dictionary["Detector_Temperature"] = raw_info[:,4]
+	OP_Dictionary['Dims']['Detector_Temperature'] = 'time'
+	OP_Dictionary['VariableAttributes']["Detector_Temperature"] = {}
+	OP_Dictionary['VariableAttributes']["Detector_Temperature"]['_FillValue'] = np.nan
+	OP_Dictionary['VariableAttributes']["Detector_Temperature"]['short_name'] = 'detector_T'
+	OP_Dictionary['VariableAttributes']["Detector_Temperature"]['units'] = 'degC'
+	OP_Dictionary['VariableAttributes']["Detector_Temperature"]['long_name'] = f'Temerature of the LHMP detector.'
+	OP_Dictionary['VariableAttributes']["Detector_Temperature"]['ACVSNC_standard_name'] = 'none'  
+
+	OP_Dictionary["Raw_Signal"] = raw_data
+	OP_Dictionary['Dims']['Raw_Signal'] = np.array(['time','H_pixel','V_pixel'])
+	OP_Dictionary['VariableAttributes']["Raw_Signal"] = {}
+	OP_Dictionary['VariableAttributes']["Raw_Signal"]['_FillValue'] = np.nan
+	OP_Dictionary['VariableAttributes']["Raw_Signal"]['short_name'] = 'raw_signal'
+	OP_Dictionary['VariableAttributes']["Raw_Signal"]['units'] = 'DN'
+	OP_Dictionary['VariableAttributes']["Raw_Signal"]['long_name'] = 'Raw output from the LHMP detector.'
+	OP_Dictionary['VariableAttributes']["Raw_Signal"]['ACVSNC_standard_name'] = 'none'  
+	OP_Dictionary['VariableAttributes']["Raw_Signal"]['ancillary'] = 'et, gain, detector_T'
+	
+	ncwrite(Output_Filename, OP_Dictionary, dims, GlobParams) 
