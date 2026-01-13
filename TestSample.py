@@ -18,4 +18,3 @@ def Run():
 	print(f"Camera Settings: {camera_settings}")
 	output_dictionary = Raw_Capture.Run(camera_settings)
 	raw_data_file_gen.Run(output_dictionary,'Test.nc')
-\
