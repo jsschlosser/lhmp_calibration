@@ -1,7 +1,7 @@
-﻿CaptureSample
-=============
+﻿Raw\_Capture
+============
 
-.. automodule:: CaptureSample
+.. automodule:: Raw_Capture
 
    
    .. rubric:: Functions

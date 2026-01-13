@@ -5,5 +5,5 @@ API
    :toctree: generated
 
    TestSample
-   CaptureSample
+   Raw_Capture
 
