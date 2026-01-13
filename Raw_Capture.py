@@ -14,7 +14,7 @@ import os
 
 def Run(camera_settings):
     """
-    Basic function for capturing samples with the LHMP.
+    Function for capturing samples with the LHMP.
 
     :param camera_settings: dictionary containing the gain and exposure time camera settings as well as the acquisition duration 
     :type camera_settings: numpy dictionary        
