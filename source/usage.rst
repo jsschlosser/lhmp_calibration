@@ -165,5 +165,5 @@ Test the instrument functionality
 .. autofunction:: TestSample.Run
 
 
-.. autofunction:: CaptureSample.Run
+.. autofunction:: Raw_Capture.Run
 

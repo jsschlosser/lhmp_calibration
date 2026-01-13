@@ -1,7 +1,18 @@
 from netCDF4 import Dataset # Note: python is case-sensitive!
 import numpy as np
 def simple(path, data, Dims, GlobParams):
+    """
+    Basic function for saving data in netCDF format.
 
+    :param path: string containing the path and file name.
+    :type path: str       
+    :param data: dictonary containing all of the variables and their associated attributes and dimensions.
+    :type: numpy dictionary
+    :param Dims: dictonary containing all of the dimensional data associated with the data dictionary.
+    :type: numpy dictionary
+    :param GlobParams: dictonary containing all of the gobal data parameters associated with the data dictionary.
+    :type: numpy dictionary   
+    """  
 
     #Opening a file, creating a new Dataset 
     try: ncfile.close()  # just to be safe, make sure dataset is not already open.
@@ -40,8 +51,7 @@ def simple(path, data, Dims, GlobParams):
                     elif values.dtype=='int64':
                         a = ncfile.createVariable(var_dirname, 'i4', shap_keys,zlib=True,complevel=4)
                     else:
-                        print(var_dirname)
-                        a = ncfile.createVariable(var_dirname,  'f4', shap_keys,zlib=True,complevel=4)      
+                        a = ncfile.createVariable(var_dirname,  values.dtype, shap_keys,zlib=True,complevel=4)      
                     for key3 in data['VariableAttributes'][key]:
                         if data['VariableAttributes'][key][key3] == 'unitless':
                             data['VariableAttributes'][key][key3] = '1'      

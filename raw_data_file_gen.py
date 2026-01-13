@@ -6,15 +6,16 @@ from zoneinfo import ZoneInfo
 import nc_write
 ncwrite = nc_write.simple
 
-def Run(raw_data_dict,Output_Filename):
+def Run(raw_data_dict,output_filename):
 	"""
 	Function for saving LHMP data to netCDF.
 
-	:param camera_settings: dictionary containing the gain and exposure time camera settings as well as the acquisition duration 
-	:type camera_settings: numpy dictionary	
-	:return: dictionary of raw image data in digital number along with the image metadata of exposure time (us), gain, acquisition time (UTC), sensor temperature (degC)
-	:rtype: numpy dictionary
+	:param raw_data_dict: dictionary of raw image data in digital number (DN) along with the image metadata of exposure time (us), gain, acquisition time in seconds after midnight (UTC), sensor temperature (degC) 
+	:type raw_data_dict: numpy dictionary
+	:param output_filename: desired name of output netCDF file
+	:type output_filename: str
 	"""  
+
 	OP_Dictionary = {}
 	OP_Dictionary['VariableAttributes'] = {}
 	OP_Dictionary['Dims'] = {}
@@ -54,13 +55,14 @@ def Run(raw_data_dict,Output_Filename):
 
 	
 	dims['time'] = len(raw_data[:,0,0])
-	OP_Dictionary["time"] = raw_info[:,3]
-	OP_Dictionary['Dims']["time"] = time
+	OP_Dictionary["time"] = raw_info[:,3].astype(int)
+	OP_Dictionary['Dims']["time"] = 'time'
 	OP_Dictionary['VariableAttributes']["time"] = {}
 	OP_Dictionary['VariableAttributes']["time"]['short_name'] = 'time'
 	OP_Dictionary['VariableAttributes']["time"]['units'] = f'seconds after {DATE} 00:00:00 UTC.'
 
 	dims['H_pixel'] = len(raw_data[0,:,0])
+	OP_Dictionary["H_pixel"] = range(0,dims['H_pixel']).astype(int)
 	OP_Dictionary['VariableAttributes']["H_pixel"] = {}
 	OP_Dictionary['Dims']["H_pixel"] = 'H_pixel'
 	OP_Dictionary['VariableAttributes']["H_pixel"]['short_name'] = 'H_pixel'
@@ -68,22 +70,23 @@ def Run(raw_data_dict,Output_Filename):
 	OP_Dictionary['VariableAttributes']["H_pixel"]['long_name'] = f'Value corresponding to the physical horizontal pixel position with 0 being the left most column on the detector.'
 
 	dims['V_pixel'] = len(raw_data[0,0,:])
+	OP_Dictionary["H_pixel"] = range(0,dims['V_pixel']).astype(int)
 	OP_Dictionary['VariableAttributes']["V_pixel"] = {}
 	OP_Dictionary['Dims']["V_pixel"] = 'V_pixel'
 	OP_Dictionary['VariableAttributes']["V_pixel"]['short_name'] = 'V_pixel'
 	OP_Dictionary['VariableAttributes']["V_pixel"]['units'] = '1'
 	OP_Dictionary['VariableAttributes']["V_pixel"]['long_name'] = f'Value corresponding to the physical vertical pixel position with 0 being the top most row on the detector.'
 
-	OP_Dictionary["Detector_Exposure_Time"] = raw_info[:,0]
+	OP_Dictionary["Detector_Exposure_Time"] = raw_info[:,0].astype(int)
 	OP_Dictionary['Dims']['Detector_Exposure_Time'] = 'time'
 	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"] = {}
 	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"]['_FillValue'] = np.nan
 	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"]['short_name'] = 'et'
-	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"]['units'] = 'miliseconds'
+	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"]['units'] = 'us'
 	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"]['long_name'] = f'Exposure time associated with the LHPM data.'
 	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"]['ACVSNC_standard_name'] = 'none'  
 
-	OP_Dictionary["Detector_Gain"] = raw_info[:,1]
+	OP_Dictionary["Detector_Gain"] = raw_info[:,1].astype(float)
 	OP_Dictionary['Dims']['Detector_Gain'] = 'time'
 	OP_Dictionary['VariableAttributes']["Detector_Gain"] = {}
 	OP_Dictionary['VariableAttributes']["Detector_Gain"]['_FillValue'] = np.nan
@@ -92,7 +95,7 @@ def Run(raw_data_dict,Output_Filename):
 	OP_Dictionary['VariableAttributes']["Detector_Gain"]['long_name'] = f'Gain associated with the LHPM data.'
 	OP_Dictionary['VariableAttributes']["Detector_Gain"]['ACVSNC_standard_name'] = 'none'
 
-	OP_Dictionary["Detector_Temperature"] = raw_info[:,4]
+	OP_Dictionary["Detector_Temperature"] = raw_info[:,4].astype(float)
 	OP_Dictionary['Dims']['Detector_Temperature'] = 'time'
 	OP_Dictionary['VariableAttributes']["Detector_Temperature"] = {}
 	OP_Dictionary['VariableAttributes']["Detector_Temperature"]['_FillValue'] = np.nan
@@ -101,7 +104,7 @@ def Run(raw_data_dict,Output_Filename):
 	OP_Dictionary['VariableAttributes']["Detector_Temperature"]['long_name'] = f'Temerature of the LHMP detector.'
 	OP_Dictionary['VariableAttributes']["Detector_Temperature"]['ACVSNC_standard_name'] = 'none'  
 
-	OP_Dictionary["Raw_Signal"] = raw_data
+	OP_Dictionary["Raw_Signal"] = raw_data.astype(int)
 	OP_Dictionary['Dims']['Raw_Signal'] = np.array(['time','H_pixel','V_pixel'])
 	OP_Dictionary['VariableAttributes']["Raw_Signal"] = {}
 	OP_Dictionary['VariableAttributes']["Raw_Signal"]['_FillValue'] = np.nan
@@ -111,4 +114,4 @@ def Run(raw_data_dict,Output_Filename):
 	OP_Dictionary['VariableAttributes']["Raw_Signal"]['ACVSNC_standard_name'] = 'none'  
 	OP_Dictionary['VariableAttributes']["Raw_Signal"]['ancillary'] = 'et, gain, detector_T'
 	
-	ncwrite(Output_Filename, OP_Dictionary, dims, GlobParams) 
+	ncwrite(output_filename, OP_Dictionary, dims, GlobParams) 

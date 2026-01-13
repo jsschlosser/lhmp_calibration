@@ -49,7 +49,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#configuring-the-raspberry-pi">Configuring the Raspberry Pi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example-of-running-programs-in-arena-api">Example of running programs in Arena api</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#instructions-for-building-sphinx-documentation-locally">Instructions for building sphinx documentation locally</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#test-the-instrument-functionality">Test the instrument functionality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-the-instrument-functionality">Test the instrument functionality</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#TestSample.Run"><code class="docutils literal notranslate"><span class="pre">Run()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Raw_Capture.Run"><code class="docutils literal notranslate"><span class="pre">Run()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
@@ -301,6 +305,37 @@
 </section>
 <section id="test-the-instrument-functionality">
 <h2>Test the instrument functionality<a class="headerlink" href="#test-the-instrument-functionality" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TestSample.Run">
+<span class="sig-prename descclassname"><span class="pre">TestSample.</span></span><span class="sig-name descname"><span class="pre">Run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TestSample.Run" title="Link to this definition"></a></dt>
+<dd><p>Simple function for inputting camera settings and acquiring images from the LHMP.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dictionary of raw image data in digital number along with the image metadata of exposure time (us), gain, acquisition time (UTC), sensor temperature (degC)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Raw_Capture.Run">
+<span class="sig-prename descclassname"><span class="pre">Raw_Capture.</span></span><span class="sig-name descname"><span class="pre">Run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camera_settings</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Raw_Capture.Run" title="Link to this definition"></a></dt>
+<dd><p>Basic function for capturing samples with the LHMP.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>camera_settings</strong> (<em>numpy dictionary</em>) – dictionary containing the gain and exposure time camera settings as well as the acquisition duration</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>dictionary of raw image data in digital number along with the image metadata of exposure time (us), gain, acquisition time (UTC), sensor temperature (degC)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 </section>
 
