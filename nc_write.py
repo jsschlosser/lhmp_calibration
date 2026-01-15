@@ -47,11 +47,11 @@ def simple(path, data, Dims, GlobParams):
                     var_dirname = key
                     shap_keys = data['Dims'][key]      
                     if values.dtype=='float64':
-                        a = ncfile.createVariable(var_dirname, 'f4', shap_keys,zlib=True,complevel=4)
+                        a = ncfile.createVariable(var_dirname, 'f4', shap_keys,zlib=True,complevel=9)
                     elif values.dtype=='int64':
-                        a = ncfile.createVariable(var_dirname, 'i4', shap_keys,zlib=True,complevel=4)
+                        a = ncfile.createVariable(var_dirname, 'i4', shap_keys,zlib=True,complevel=9)
                     else:
-                        a = ncfile.createVariable(var_dirname,  values.dtype, shap_keys,zlib=True,complevel=4)      
+                        a = ncfile.createVariable(var_dirname,  values.dtype, shap_keys,zlib=True,complevel=9)      
                     for key3 in data['VariableAttributes'][key]:
                         if data['VariableAttributes'][key][key3] == 'unitless':
                             data['VariableAttributes'][key][key3] = '1'      

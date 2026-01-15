@@ -21,6 +21,7 @@ def Run(camera_settings):
     :return: dictionary of raw image data in digital number along with the image metadata of exposure time (us), gain, acquisition time (UTC), sensor temperature (degC)
     :rtype: numpy dictionary
     """  
+    
     devices = system.create_device()    
     print(devices)
     image_data_list = [] # Store acquired images
@@ -91,7 +92,7 @@ def Run(camera_settings):
                 gainvalue = device_nm['GainRaw'].value
                 exposuretimevalue = device_nm['ExposureTimeRaw'].value 
                 DeviceT = device_nm['DeviceTemperature'].value #
-                image_info_list.append([exposuretimevalue, gainvalue, today_utc_date, seconds_after_midnight, DeviceT])
+                image_info_list.append([exposuretimevalue, gainvalue, utc_now, seconds_after_midnight, DeviceT])
                 
                 device.requeue_buffer(image_buffer)
 

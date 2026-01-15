@@ -8,12 +8,12 @@ ncwrite = nc_write.simple
 
 def Run(raw_data_dict,output_filename):
 	"""
-	Function for saving LHMP data to netCDF.
+	Function for capturing samples with the LHMP.
 
-	:param raw_data_dict: dictionary of raw image data in digital number (DN) along with the image metadata of exposure time (us), gain, acquisition time in seconds after midnight (UTC), sensor temperature (degC) 
-	:type raw_data_dict: numpy dictionary
-	:param output_filename: desired name of output netCDF file
-	:type output_filename: str
+	:param raw_data_dict: raw image dictionary with ancillary data.
+	:type raw_data_dict: numpy dictionary	 
+	:param output_filename: user set output path/filename.
+	:type output_filename: string   
 	"""  
 
 	OP_Dictionary = {}
@@ -35,7 +35,7 @@ def Run(raw_data_dict,output_filename):
 	GlobParams['format'] = 'NETCDF4'
 	GlobParams['history'] = f'Raw (level 0) LHMP data'
 	GlobParams['IdentifierProductDOI'] = 'TBD'
-	GlobParams['institution'] = 'ORAU-NASA Langley'
+	GlobParams['institution'] = 'Hampton University'
 	GlobParams['last_modified_date'] = datetime.today().strftime('%Y-%m-%d')
 	GlobParams['ACVSNC_standard_name_URL'] = 'https://www-air.larc.nasa.gov/missions/etc/AtmosphericCompositionVariableStandardNames.pdf'
 	GlobParams['ACVSNC_standard_name_version'] = '1.0'
@@ -47,9 +47,9 @@ def Run(raw_data_dict,output_filename):
 	GlobParams['project'] = 'Langley-Hampton Multispectral Polarimeter (LHMP)'
 	GlobParams['references'] = 'TBD'
 	GlobParams['source'] = 'Raw output data from LHMP'
-	GlobParams['time_coverage_end'] = raw_info[0,2].strftime('%Y%m%dT%H%M%S-%f')
+	GlobParams['time_coverage_end'] =f' {raw_info[-1,2].strftime('%Y%m%dT%H%M%S-%f')} (UTC)'
 	GlobParams['time_coverage_resolution'] = '1 second'
-	GlobParams['time_coverage_start'] = raw_info[-1,2].strftime('%Y%m%dT%H%M%S-%f')
+	GlobParams['time_coverage_start'] = f'{raw_info[0,2].strftime('%Y%m%dT%H%M%S-%f')} (UTC)'
 	GlobParams['title'] = 'Level 0 LHMP output data'
 	GlobParams['VersionID'] = f'R0'
 
@@ -62,7 +62,7 @@ def Run(raw_data_dict,output_filename):
 	OP_Dictionary['VariableAttributes']["time"]['units'] = f'seconds after {DATE} 00:00:00 UTC.'
 
 	dims['H_pixel'] = len(raw_data[0,:,0])
-	OP_Dictionary["H_pixel"] = range(0,dims['H_pixel']).astype(int)
+	OP_Dictionary["H_pixel"] = np.arange(0,dims['H_pixel'])
 	OP_Dictionary['VariableAttributes']["H_pixel"] = {}
 	OP_Dictionary['Dims']["H_pixel"] = 'H_pixel'
 	OP_Dictionary['VariableAttributes']["H_pixel"]['short_name'] = 'H_pixel'
@@ -70,14 +70,14 @@ def Run(raw_data_dict,output_filename):
 	OP_Dictionary['VariableAttributes']["H_pixel"]['long_name'] = f'Value corresponding to the physical horizontal pixel position with 0 being the left most column on the detector.'
 
 	dims['V_pixel'] = len(raw_data[0,0,:])
-	OP_Dictionary["H_pixel"] = range(0,dims['V_pixel']).astype(int)
+	OP_Dictionary["V_pixel"] = np.arange(0,dims['V_pixel'])
 	OP_Dictionary['VariableAttributes']["V_pixel"] = {}
 	OP_Dictionary['Dims']["V_pixel"] = 'V_pixel'
 	OP_Dictionary['VariableAttributes']["V_pixel"]['short_name'] = 'V_pixel'
 	OP_Dictionary['VariableAttributes']["V_pixel"]['units'] = '1'
 	OP_Dictionary['VariableAttributes']["V_pixel"]['long_name'] = f'Value corresponding to the physical vertical pixel position with 0 being the top most row on the detector.'
 
-	OP_Dictionary["Detector_Exposure_Time"] = raw_info[:,0].astype(int)
+	OP_Dictionary["Detector_Exposure_Time"] = raw_info[:,0].astype('uint8')
 	OP_Dictionary['Dims']['Detector_Exposure_Time'] = 'time'
 	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"] = {}
 	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"]['_FillValue'] = np.nan
@@ -104,7 +104,7 @@ def Run(raw_data_dict,output_filename):
 	OP_Dictionary['VariableAttributes']["Detector_Temperature"]['long_name'] = f'Temerature of the LHMP detector.'
 	OP_Dictionary['VariableAttributes']["Detector_Temperature"]['ACVSNC_standard_name'] = 'none'  
 
-	OP_Dictionary["Raw_Signal"] = raw_data.astype(int)
+	OP_Dictionary["Raw_Signal"] = raw_data
 	OP_Dictionary['Dims']['Raw_Signal'] = np.array(['time','H_pixel','V_pixel'])
 	OP_Dictionary['VariableAttributes']["Raw_Signal"] = {}
 	OP_Dictionary['VariableAttributes']["Raw_Signal"]['_FillValue'] = np.nan
