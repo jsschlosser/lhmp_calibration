@@ -46,7 +46,6 @@ def Run(camera_settings):
         device_nm['ExposureAuto'] .value = camera_settings['ExposureAuto'] 
         if device_nm['ExposureAuto'] .value == 'Off':
             device_nm['ExposureTimeRaw'].value = camera_settings['ExposureTimeSetting']     
-            device_nm['ExposureTimeRaw'].value = camera_settings['ExposureTimeSetting']     
 
         # Get nodes ---------------------------------------------------------------
         nodes = device_nm.get_node(['Width', 'Height', 'PixelFormat']) 
@@ -57,11 +56,8 @@ def Run(camera_settings):
         height = nodes['Height']
         height.value = height.max   
 
-        # Set pixel format to 'PolarizedDolp_BayerRG8'
-        pixel_format_name = 'PolarizedDolp_BayerRG8'
-        pixel_format_name = 'BayerRG8'
-        
-        nodes['PixelFormat'].value = pixel_format_name
+        # Set pixel format (e.g., 'PolarizedDolp_BayerRG8', 'BayerRG8', etc.)
+        nodes['PixelFormat'].value = camera_settings['PixelFormat']
         
         start_time = time.time()
         print(f"Starting image acquisition for {camera_settings['acquisition_duration']} seconds...")
@@ -95,6 +91,7 @@ def Run(camera_settings):
                 image_info_list.append([exposuretimevalue, gainvalue, utc_now, seconds_after_midnight, DeviceT])
                 
                 device.requeue_buffer(image_buffer)
+                time.sleep(camera_settings['sleep_time'])
 
     output_dictionary = {}
     output_dictionary['image_data_list'] = np.array(image_data_list)

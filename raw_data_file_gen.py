@@ -24,6 +24,7 @@ def Run(raw_data_dict,output_filename):
 
 	raw_data = raw_data_dict['image_data_list']
 	raw_info = raw_data_dict['image_info_list']
+	print(raw_info)
 	DATE= raw_info[0,2].strftime("%Y-%m-%d") 
 	print(DATE)
 	GlobParams['conventions']='CF-1.9'
@@ -47,9 +48,9 @@ def Run(raw_data_dict,output_filename):
 	GlobParams['project'] = 'Langley-Hampton Multispectral Polarimeter (LHMP)'
 	GlobParams['references'] = 'TBD'
 	GlobParams['source'] = 'Raw output data from LHMP'
-	GlobParams['time_coverage_end'] =f' {raw_info[-1,2].strftime('%Y%m%dT%H%M%S-%f')} (UTC)'
+	GlobParams['time_coverage_end'] =f' {raw_info[-1,2].strftime("%Y%m%dT%H%M%S-%f")} (UTC)'
 	GlobParams['time_coverage_resolution'] = '1 second'
-	GlobParams['time_coverage_start'] = f'{raw_info[0,2].strftime('%Y%m%dT%H%M%S-%f')} (UTC)'
+	GlobParams['time_coverage_start'] = f'{raw_info[0,2].strftime("%Y%m%dT%H%M%S-%f")} (UTC)'
 	GlobParams['title'] = 'Level 0 LHMP output data'
 	GlobParams['VersionID'] = f'R0'
 
@@ -77,10 +78,10 @@ def Run(raw_data_dict,output_filename):
 	OP_Dictionary['VariableAttributes']["V_pixel"]['units'] = '1'
 	OP_Dictionary['VariableAttributes']["V_pixel"]['long_name'] = f'Value corresponding to the physical vertical pixel position with 0 being the top most row on the detector.'
 
-	OP_Dictionary["Detector_Exposure_Time"] = raw_info[:,0].astype('uint8')
+	OP_Dictionary["Detector_Exposure_Time"] = raw_info[:,0].astype(int)
 	OP_Dictionary['Dims']['Detector_Exposure_Time'] = 'time'
 	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"] = {}
-	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"]['_FillValue'] = np.nan
+	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"]['_FillValue'] = -1
 	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"]['short_name'] = 'et'
 	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"]['units'] = 'us'
 	OP_Dictionary['VariableAttributes']["Detector_Exposure_Time"]['long_name'] = f'Exposure time associated with the LHPM data.'
