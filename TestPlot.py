@@ -76,7 +76,7 @@ def demosaic_test():
 
 def standard_test():
 	"""
-	Function for visualizing standard polarizer DolP.
+	Function for visualizing standard polarizer DoLP and AoLP.
   
 	""" 
 
@@ -100,3 +100,22 @@ def standard_test():
 
 		#img_dolp_vis = pa.applyColorToDoP(dolp_mono) 
 		cv2.imwrite(DOLP_png_name, img_dolp_vis)
+
+	pathto_raw_data_file = '../PolarizedAolp_BayerRG8_test.nc'
+	data = Dataset(pathto_raw_data_file,'r')
+	data_dictionary = {}		 
+	for key in data.variables.keys():
+		vals = data.variables[key][:]
+		print(key)
+		data_dictionary[key] = vals#np.where(vals == '--', np.nan, vals)
+	image_data = data_dictionary['Raw_Signal']
+	dataset_length = len(image_data[:,0,0])
+	h_pixel_length = len(image_data[0,:,0])
+	v_pixel_length = len(image_data[0,0,:])
+	angles = np.deg2rad([0, 45, 90, 135])
+	for i1 in range(0,dataset_length):
+		AOLP_png_name = f'../LeveL_1_data/AOLP_standard_{i1}.tiff'
+		aolp_mono = np.squeeze(image_data[i1,:,:])
+		norm_aolp = mcolors.Normalize(vmin=np.min(aolp_mono), vmax=np.max(aolp_mono))
+		img_aolp_vis = (norm_dolp(aolp_mono)*255).astype('uint8')
+		cv2.imwrite(AOLP_png_name, img_aolp_vis)

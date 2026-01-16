@@ -22,7 +22,7 @@ def DarkCurrent(pathto_raw_dark_cal_data=None):
 	for key in dark_cal_data.variables.keys():
 		print(key)
 		vals = dark_cal_data.variables[key][:]
-		dark_cal_data_dictionary[key] = np.where(vals == '--', np.nan, vals)#vals#
+		dark_cal_data_dictionary[key] = vals# np.where(vals == '--', np.nan, vals)#vals#
 
 	image_data = dark_cal_data_dictionary['Raw_Signal'] # sensor data to be processed and plotted
 	sensor_temp = dark_cal_data_dictionary['Detector_Temperature'] # sensor temperature to be processed and plotted
@@ -68,7 +68,7 @@ def DarkRead(pathto_raw_dark_cal_data=None):
 	dark_cal_data_dictionary = {}
 	for key in dark_cal_data.variables.keys():
 		vals = dark_cal_data.variables[key][:]
-		dark_cal_data_dictionary[key] = np.where(vals == '--', np.nan, vals)#vals#
+		dark_cal_data_dictionary[key] = vals#np.where(vals == '--', np.nan, vals)#vals#
 
 	image_data = dark_cal_data_dictionary['Raw_Signal'] # sensor data to be processed and plotted
 	sensor_et = dark_cal_data_dictionary['Detector_Exposure_Time'] # sensor temperature to be processed and plotted
