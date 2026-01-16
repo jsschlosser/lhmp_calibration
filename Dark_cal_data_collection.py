@@ -15,7 +15,7 @@ def DarkCurrent():
 	camera_settings['ExposureAuto'] = 'Off'#'Off'
 	camera_settings['GainSetting'] = 0
 	camera_settings['ExposureTimeSetting'] = 150000#5147373
-	camera_settings['sleep_time'] = 5
+	camera_settings['sleep_time'] = 1
 	camera_settings['PixelFormat'] = 'BayerRG8'
 	print(f"Camera Settings: {camera_settings}")
 	output_dictionary = Raw_Capture.Run(camera_settings)

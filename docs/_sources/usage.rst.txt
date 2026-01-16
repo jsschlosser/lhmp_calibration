@@ -167,3 +167,27 @@ Test the instrument functionality
 
 .. autofunction:: Raw_Capture.Run
 
+
+.. autofunction:: raw_data_file_gen.Run
+
+
+.. autofunction:: TestPlot.standard_test
+
+
+.. autofunction:: TestPlot.demosaic_test
+
+Perform dark calibration measurements
+-------------------------------------
+
+.. autofunction:: Dark_cal_data_collection.DarkCurrent
+
+
+.. autofunction:: Dark_cal_data_collection.DarkRead
+
+Visualize dark calibration measurements
+---------------------------------------
+
+.. autofunction:: Dark_cal_data_processing.DarkCurrent
+
+
+.. autofunction:: Dark_cal_data_processing.DarkRead

@@ -182,7 +182,7 @@ Perform dark calibration measurements
 .. autofunction:: Dark_cal_data_collection.DarkCurrent
 
 
-.. autofunction:: Dark_cal_data_collection.DarkCurrent
+.. autofunction:: Dark_cal_data_collection.DarkRead
 
 Visualize dark calibration measurements
 ---------------------------------------
@@ -190,4 +190,4 @@ Visualize dark calibration measurements
 .. autofunction:: Dark_cal_data_processing.DarkCurrent
 
 
-.. autofunction:: Dark_cal_data_processing.DarkCurrent
+.. autofunction:: Dark_cal_data_processing.DarkRead

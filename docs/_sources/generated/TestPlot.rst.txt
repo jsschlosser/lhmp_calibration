@@ -8,6 +8,6 @@
 
    .. autosummary::
    
-      DemosaicTest
+      demosaic_test
       standard_test
    

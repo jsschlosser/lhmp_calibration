@@ -24,7 +24,6 @@ def Run(raw_data_dict,output_filename):
 
 	raw_data = raw_data_dict['image_data_list']
 	raw_info = raw_data_dict['image_info_list']
-	print(raw_info)
 	DATE= raw_info[0,2].strftime("%Y-%m-%d") 
 	print(DATE)
 	GlobParams['conventions']='CF-1.9'
