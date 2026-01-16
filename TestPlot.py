@@ -6,7 +6,7 @@ import cv2
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import matplotlib.colors as mcolors
-def DemosaicTest():
+def demosaic_test():
 	"""
 	Function for demosaicing and visualizing DoLP, AoLP, intensity, and the Stoke's vector components.
   
