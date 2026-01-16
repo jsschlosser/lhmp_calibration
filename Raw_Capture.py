@@ -23,7 +23,7 @@ def Run(camera_settings):
     """  
     
     devices = system.create_device()    
-    print(devices)
+    #print(devices)
     image_data_list = [] # Store acquired images
     image_info_list = [] # Store acquired image meta info (Gain, Exposure Time, Acquisition Time, etc.,)
 
@@ -60,7 +60,7 @@ def Run(camera_settings):
         nodes['PixelFormat'].value = camera_settings['PixelFormat']
         
         start_time = time.time()
-        print(f"Starting image acquisition for {camera_settings['acquisition_duration']} seconds...")
+        #print(f"Starting image acquisition for {camera_settings['acquisition_duration']} seconds...")
 
         while time.time() - start_time < camera_settings['acquisition_duration']: # Continuously fetch and process images
             with device.start_stream(1):
@@ -79,10 +79,10 @@ def Run(camera_settings):
                 image_data_list.append(nparray_reshaped.copy()) # Store the image data
                 utc_now = datetime.datetime.now(ZoneInfo("UTC"))            
 
-                # 4. Calculate the time difference (timedelta)
+                # Calculate the time difference (timedelta)
                 time_since_midnight = utc_now - midnight_utc                
 
-                # 5. Get the total number of seconds as a float
+                # Get the total number of seconds as a float
                 seconds_after_midnight = time_since_midnight.total_seconds()
 
                 gainvalue = device_nm['GainRaw'].value

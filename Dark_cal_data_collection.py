@@ -4,7 +4,7 @@ import numpy as np
 import raw_data_file_gen
 def DarkCurrent():
 	"""
-	Function for inputting camera settings and acquiring images from the LHMP. Writes output level 0 data to netCDF file for processing.
+	Function for capturing a set of dark current measurements by running this on starup with the instrument with the lense cap on.
 
 	
 	"""  
@@ -24,8 +24,7 @@ def DarkCurrent():
 
 def DarkRead():
 	"""
-	Function for inputting camera settings and acquiring images from the LHMP. Writes output level 0 data to netCDF file for processing.
-
+	Function for capturing a set of dark read measurements by varying expsure time after running the DarkCurrent routine. 
 	
 	"""  
 
@@ -41,7 +40,7 @@ def DarkRead():
 	camera_settings['PixelFormat'] = 'BayerRG8'
 	for i1 in np.logspace(np.log10(10000),np.log10(150000),100):
 		camera_settings['ExposureTimeSetting'] = int(i1)#5147373
-		print(f"Camera Settings: {camera_settings}")
+		#print(f"Camera Settings: {camera_settings}")
 		OP_dict = Raw_Capture.Run(camera_settings)
 		for key in OP_dict:
 			if output_dictionary[key] is None:

@@ -8,10 +8,10 @@ import matplotlib.cm as cm
 import matplotlib.colors as mcolors
 def DemosaicTest():
 	"""
-	Function for capturing samples with the LHMP.
-	:param pathto_raw_data_file: Path to raw image dataset.
-	:type pathto_raw_data_file: string	  
+	Function for demosaicing and visualizing DoLP, AoLP, intensity, and the Stoke's vector components.
+  
 	"""  
+
 	pathto_raw_data_file = '../BayerRG8_test.nc'
 	data = Dataset(pathto_raw_data_file,'r')
 	data_dictionary = {}		 
@@ -37,10 +37,7 @@ def DemosaicTest():
 		img_dolp_bgr = pa.cvtStokesToDoLP(img_stokes)
 		img_aolp_bgr = pa.cvtStokesToAoLP(img_stokes)	
 
-		# 4. Visualization (optional)
-		# The results (s0, dolp, aolp) are full-resolution images.
-		# s0 represents the total intensity (a normal color image).
-
+		# The results (s0, dolp, aolp) are full-resolution images. s0 represents the total intensity (a normal color image).
 		s0 = np.sum(img_intensity_bgr,axis=2)
 		norm_s0 = mcolors.Normalize(vmin=np.min(s0), vmax=np.max(s0))
 		s0_vis = (norm_s0(s0)*255).astype('uint8')
@@ -63,6 +60,11 @@ def DemosaicTest():
 			cv2.imwrite(intensity_png_name, img_stokes_vis)
 
 def standard_test():
+	"""
+	Function for visualizing standard polarizer DolP.
+  
+	""" 
+
 	pathto_raw_data_file = '../PolarizedDolp_BayerRG8_test.nc'
 	data = Dataset(pathto_raw_data_file,'r')
 	data_dictionary = {}		 
