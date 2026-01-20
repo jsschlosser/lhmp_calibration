@@ -15,7 +15,7 @@ def DarkCurrent():
 	camera_settings['ExposureAuto'] = 'Off'#'Off'
 	camera_settings['GainSetting'] = 0
 	camera_settings['ExposureTimeSetting'] = 150000#5147373
-	camera_settings['sleep_time'] = 1
+	camera_settings['sleep_time'] = 0.5
 	camera_settings['PixelFormat'] = 'BayerRG8'
 	print(f"Camera Settings: {camera_settings}")
 	output_dictionary = Raw_Capture.Run(camera_settings)
@@ -33,12 +33,12 @@ def DarkRead():
 	output_dictionary['image_info_list'] = None
 	camera_settings = {}
 	camera_settings['acquisition_duration'] = 10
-	camera_settings['sleep_time'] = 0.1
+	camera_settings['sleep_time'] = 0.5
 	camera_settings['GainAuto'] = 'Off' #'Continuous' #'Off'
 	camera_settings['ExposureAuto'] = 'Off'#'Off'
 	camera_settings['GainSetting'] = 0
 	camera_settings['PixelFormat'] = 'BayerRG8'
-	for i1 in np.logspace(np.log10(10000),np.log10(150000),10):
+	for i1 in np.logspace(np.log10(10000),np.log10(150000),50):
 		camera_settings['ExposureTimeSetting'] = int(i1)#5147373
 		#print(f"Camera Settings: {camera_settings}")
 		OP_dict = Raw_Capture.Run(camera_settings)

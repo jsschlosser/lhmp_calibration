@@ -19,5 +19,5 @@ def Run():
 		camera_settings['PixelFormat'] = pxl_frmt
 		print(f"Camera Settings: {camera_settings}")
 		output_dictionary = Raw_Capture.Run(camera_settings)
-		raw_data_file_gen.Run(output_dictionary,f'{camera_settings['PixelFormat']}_test.nc')
-		camera_settings['PixelFormat'] = 'PolarizedDolp_BayerRG8'#'BayerRG8'#'PolarizedDolp_BayerRG8'#'PolarizedAolp_BayerRG8'
+		raw_data_file_gen.Run(output_dictionary,f'{camera_settings["PixelFormat"]}_test.nc')
+		#camera_settings['PixelFormat'] = 'PolarizedDolp_BayerRG8'#'BayerRG8'#'PolarizedDolp_BayerRG8'#'PolarizedAolp_BayerRG8'

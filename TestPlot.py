@@ -117,5 +117,5 @@ def standard_test():
 		AOLP_png_name = f'../LeveL_1_data/AOLP_standard_{i1}.tiff'
 		aolp_mono = np.squeeze(image_data[i1,:,:])
 		norm_aolp = mcolors.Normalize(vmin=np.min(aolp_mono), vmax=np.max(aolp_mono))
-		img_aolp_vis = (norm_dolp(aolp_mono)*255).astype('uint8')
+		img_aolp_vis = (norm_aolp(aolp_mono)*255).astype('uint8')
 		cv2.imwrite(AOLP_png_name, img_aolp_vis)
