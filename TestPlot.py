@@ -44,11 +44,26 @@ def demosaic_test():
 		img_aolp_total = pa.cvtStokesToAoLP(img_stokes_total)
 
 		# The results (s0, dolp, aolp) are full-resolution images. s0 represents the total intensity (a normal color image).
-		s0 = np.sum(img_intensity_bgr,axis=2)
+		s0 = img_stokes_total[...,0]
+		s1 = img_stokes_total[...,1]
+		s2 = img_stokes_total[...,2]
+		q = s1/s0
+		u = s2/s0
+
 		norm_s0 = mcolors.Normalize(vmin=np.min(s0), vmax=np.max(s0))
 		s0_vis = (norm_s0(s0)*255).astype('uint8')
 		total_intensity_png_name = f'../LeveL_1_data/S0_total_{i1}.tiff'
 		cv2.imwrite(total_intensity_png_name, s0_vis)
+
+		norm_q = mcolors.Normalize(vmin=np.min(q), vmax=np.max(q))
+		q_vis = (norm_q(q)*255).astype('uint8')
+		q_png_name = f'../LeveL_1_data/q_total_{i1}.tiff'
+		cv2.imwrite(q_png_name, q_vis)
+
+		norm_u = mcolors.Normalize(vmin=np.min(u), vmax=np.max(u))
+		u_vis = (norm_u(u)*255).astype('uint8')
+		u_png_name = f'../LeveL_1_data/u_total_{i1}.tiff'
+		cv2.imwrite(u_png_name, u_vis)
 
 		norm_dolp = mcolors.Normalize(vmin=np.min(img_dolp_total), vmax=np.max(img_dolp_total))
 		img_dolp_vis = (norm_dolp(img_dolp_total)*255).astype('uint8')

@@ -107,7 +107,7 @@ def Run(raw_data_dict,output_filename):
 	OP_Dictionary["Raw_Signal"] = raw_data
 	OP_Dictionary['Dims']['Raw_Signal'] = np.array(['time','H_pixel','V_pixel'])
 	OP_Dictionary['VariableAttributes']["Raw_Signal"] = {}
-	OP_Dictionary['VariableAttributes']["Raw_Signal"]['_FillValue'] = -1
+	OP_Dictionary['VariableAttributes']["Raw_Signal"]['_FillValue'] = 0
 	OP_Dictionary['VariableAttributes']["Raw_Signal"]['short_name'] = 'raw_signal'
 	OP_Dictionary['VariableAttributes']["Raw_Signal"]['units'] = 'DN'
 	OP_Dictionary['VariableAttributes']["Raw_Signal"]['long_name'] = 'Raw output from the LHMP detector.'

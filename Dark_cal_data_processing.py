@@ -48,7 +48,7 @@ def DarkCurrent(pathto_raw_dark_cal_data=None):
 		ax2.scatter(x[y>0],y[y>0])
 	ax2.set_xlabel(r"Sensor Temperature ($\degree$C)")
 	ax2.set_ylabel(r"Sensor Signal (DN)")
-	ax2.set_ylim(0,np.nanmax(Img_Data,axis=(0,1)))
+	ax2.set_ylim(0,np.nanmax(Img_Data))
 	plt.tight_layout()
 	plt.savefig(f"../DarkCal/DarkCurrent_plt.jpg", dpi=300)
 	plt.close() # 
@@ -91,11 +91,11 @@ def DarkRead(pathto_raw_dark_cal_data=None):
 	# plot sensor data of each pixel against temperature for each time step.
 	for i in range(len(sensor_et)):
 		y = Img_Data[i,:]
-		x = np.squeeze(sensor_et[i]*np.ones((1,len(Img_Data[i,:]))))
+		x = np.squeeze(sensor_et[i]*np.ones((1,len(Img_Data[i,:]))))*10**(-6)
 		ax2.scatter(x[y>0],y[y>0])
-	ax2.set_xlabel(r"Exposure Time ($\mu$s)")
+	ax2.set_xlabel(r"Exposure Time (second)")
 	ax2.set_ylabel(r"Sensor Signal (DN)")
-	ax2.set_ylim(0,np.nanmax(Img_Data,axis=(0,1)))
+	ax2.set_ylim(0,np.nanmax(Img_Data))
 	plt.tight_layout()
 	plt.savefig(f"../DarkCal/DarkRead_plt.jpg", dpi=300)
 	plt.close() # 

@@ -15,7 +15,7 @@ def DarkCurrent():
 	camera_settings['ExposureAuto'] = 'Off'#'Off'
 	camera_settings['GainSetting'] = 0
 	camera_settings['ExposureTimeSetting'] = 150000#5147373
-	camera_settings['sleep_time'] = 0.5
+	camera_settings['sleep_time'] = 0.25
 	camera_settings['PixelFormat'] = 'BayerRG8'
 	print(f"Camera Settings: {camera_settings}")
 	output_dictionary = Raw_Capture.Run(camera_settings)
@@ -38,7 +38,7 @@ def DarkRead():
 	camera_settings['ExposureAuto'] = 'Off'#'Off'
 	camera_settings['GainSetting'] = 0
 	camera_settings['PixelFormat'] = 'BayerRG8'
-	for i1 in np.logspace(np.log10(10000),np.log10(150000),50):
+	for i1 in np.logspace(np.log10(10000),np.log10(150000),25):
 		camera_settings['ExposureTimeSetting'] = int(i1)#5147373
 		#print(f"Camera Settings: {camera_settings}")
 		OP_dict = Raw_Capture.Run(camera_settings)
@@ -46,7 +46,7 @@ def DarkRead():
 			if output_dictionary[key] is None:
 				output_dictionary[key] = OP_dict[key]
 			else:
-				output_dictionary[key] = np.hstack((output_dictionary[key],OP_dict[key]))
+				output_dictionary[key] = np.vstack((output_dictionary[key],OP_dict[key]))
 
 
 	raw_data_file_gen.Run(output_dictionary,'DarkRead.nc')
