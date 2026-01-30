@@ -43,7 +43,7 @@ def Run(raw_data_dict,output_filename):
 	GlobParams['PI_contact'] = 'joseph.schlosser@hamptonu.edu'
 	GlobParams['PI_name'] = 'Joseph Schlosser'
 	GlobParams['platform_identifier'] = 'LHMP'
-	GlobParams['ProcessingLevel'] = '4'
+	GlobParams['ProcessingLevel'] = '0'
 	GlobParams['project'] = 'Langley-Hampton Multispectral Polarimeter (LHMP)'
 	GlobParams['references'] = 'TBD'
 	GlobParams['source'] = 'Raw output data from LHMP'

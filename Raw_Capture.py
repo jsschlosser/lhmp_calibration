@@ -40,6 +40,7 @@ def Run(camera_settings):
         tl_stream_nodemap['StreamPacketResendEnable'].value = True # Enable stream packet resend
         
         device_nm = device.nodemap
+        device_nm['BlackLevelRaw'].value = 0
         device_nm['GainAuto'].value = camera_settings['GainAuto']  #'Continuous'
         if device_nm['GainAuto'].value == 'Off':
             device_nm['GainRaw'].value = camera_settings['GainSetting']
